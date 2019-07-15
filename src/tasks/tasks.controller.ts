@@ -29,7 +29,7 @@ export class TasksController {
     }
 
     @Put('/:id/status')
-    updateTaskStatusById(@Param('id') id: string, @Body() taskStatus: TaskStatus): Task {
-        return this.tasksService.updateTaskStatusById(id, taskStatus);
+    updateTaskStatusById(@Param('id') id: string, @Body() status: TaskStatus): Task {
+        return this.tasksService.updateTaskStatusById(id, status);
     }
 }

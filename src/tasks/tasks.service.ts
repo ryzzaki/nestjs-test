@@ -35,9 +35,9 @@ export class TasksService {
         return deletedObject;
     }
 
-    updateTaskStatusById(id: string, @Body() taskStatus: TaskStatus): Task {
+    updateTaskStatusById(id: string, @Body() status: TaskStatus): Task {
         const task = this.getTaskById(id);
-        task.status = taskStatus;
+        task.status = status;
         return task;
     }
 }
