@@ -24,9 +24,9 @@ export class TaskRepository extends Repository<Task> {
         return task;
     }
 
-    async deleteTaskById(id: number): Promise<Task> {
+    async deleteTaskById(id: number, user: User): Promise<Task> {
         const deletedTask = await this.findOne(id); // Don't do this in a production app. This is a redundant call.
-        const result = await this.delete(id);
+        const result = await this.delete({ id, userId: user.id });
 
         if (result.affected === 0) {
             throw new NotFoundException(`Task with "${id}" cannot be found.`)

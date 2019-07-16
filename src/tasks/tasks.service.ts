@@ -1,4 +1,4 @@
-import { Injectable, Body, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { isNullOrUndefined } from 'util';
 import { TaskRepository } from './task.repository';
@@ -23,8 +23,8 @@ export class TasksService {
         return this.taskRepository.createTask(createTaskDto, user);
     }
 
-    async getTaskById(id: number): Promise<Task> {
-        const found = await this.taskRepository.findOne(id);
+    async getTaskById(id: number, user: User): Promise<Task> {
+        const found = await this.taskRepository.findOne({ where: { id, userId: user.id} });
 
         if (!found) {
             throw new NotFoundException(`Task with "${id}" cannot be found.`);
@@ -33,12 +33,12 @@ export class TasksService {
         return found;
     }
 
-    async deleteTaskById(id: number): Promise<Task> {
-        return this.taskRepository.deleteTaskById(id);
+    async deleteTaskById(id: number, user: User): Promise<Task> {
+        return this.taskRepository.deleteTaskById(id, user);
     }
 
-    async updateTaskStatusById(id: number, @Body() status: TaskStatus): Promise<Task> {
-        const task = await this.getTaskById(id);
+    async updateTaskStatusById(id: number, status: TaskStatus, user: User): Promise<Task> {
+        const task = await this.getTaskById(id, user);
         task.status = status;
         await task.save();
         return task;
